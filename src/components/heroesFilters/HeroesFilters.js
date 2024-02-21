@@ -1,6 +1,6 @@
 import { useHttp } from "../../hooks/http.hook";
 import { useDispatch } from "react-redux";
-import { filtersFetched, filtersFetchingError, heroesFetched } from "../../actions";
+import { filtersFetched, filtersFetchingError, filterSetActive } from "../../actions";
 import { useEffect } from "react";
 import { useSelector } from "react-redux";
 // Задача для этого компонента:
@@ -11,8 +11,7 @@ import { useSelector } from "react-redux";
 // Представьте, что вы попросили бэкенд-разработчика об этом
 
 const HeroesFilters = () => {
-    const {filters, heroes} = useSelector(state => state);
-
+    const {filters, activeFilter} = useSelector(state => state.filters);
     const {request} = useHttp();
 
     const dispatch = useDispatch();
@@ -21,17 +20,11 @@ const HeroesFilters = () => {
         request("http://localhost:3001/filters")
             .then(data => dispatch(filtersFetched(data)))
             .catch(() => dispatch(filtersFetchingError()))
-    }, []);
+    }, [request])
+
 
     const onFilter = (element) => {
-        if (element !== 'all') {
-            const newArr = heroes.filter(item => item.element === element)
-            dispatch(heroesFetched(newArr))
-        } else {
-            request("http://localhost:3001/heroes")
-                .then(data => dispatch(heroesFetched(data)))
-            
-        }
+        dispatch(filterSetActive(element))
     }
 
     const renderFiltersList = (arr) => {
@@ -40,7 +33,8 @@ const HeroesFilters = () => {
         }
         
         return arr.map((item, i) => {
-            return <button key={i} className={item.classes} onClick={() => onFilter(item.element)} >{item.name}</button>
+            const additionalClass = item.element === activeFilter ? 'active' : null
+            return <button key={i} className={`${item.classes}  ${additionalClass}`} onClick={() => onFilter(item.element)} >{item.name}</button>
         })
     }
 

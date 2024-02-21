@@ -19,7 +19,7 @@ const HeroesAddForm = () => {
     const [description, setDescription] = useState('');
     const [element, setElement] = useState('');
 
-    const {heroes} = useSelector(state => state);
+    const {heroes} = useSelector(state => state.heroes);
     const dispatch = useDispatch();
 
     const changeName = (e) => {
