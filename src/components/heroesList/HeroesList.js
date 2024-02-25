@@ -2,9 +2,8 @@ import {useHttp} from '../../hooks/http.hook';
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { createSelector } from 'reselect';
-import { heroesFetch } from '../../actions';
+import { fetchHeroes, heroDeleted } from '../heroesList/heroesSlice';
 
-import { heroesFetched } from '../heroesList/heroesSlice';
 import HeroesListItem from "../heroesListItem/HeroesListItem";
 import Spinner from '../spinner/Spinner';
 
@@ -29,13 +28,12 @@ const HeroesList = () => {
     const {request} = useHttp();
 
     useEffect(() => {
-        dispatch(heroesFetch(request))
-        // eslint-disable-next-line
+        dispatch(fetchHeroes())
     }, []);
 
     const onDeleteHero = (id) => {
         const newArr = heroes.filter(item => item.id !== id);
-        dispatch(heroesFetched(newArr));
+        dispatch(heroDeleted(newArr));
     }
 
     if (heroesLoadingStatus === "loading") {

@@ -1,14 +1,9 @@
 import { useHttp } from "../../hooks/http.hook";
 import { useDispatch } from "react-redux";
-import { filtersFetched, filtersFetchingError, filterSetActive } from "./filterSlice";
+import { filterSetActive } from "./filterSlice";
 import { useEffect } from "react";
 import { useSelector } from "react-redux";
-// Задача для этого компонента:
-// Фильтры должны формироваться на основании загруженных данных
-// Фильтры должны отображать только нужных героев при выборе
-// Активный фильтр имеет класс active
-// Изменять json-файл для удобства МОЖНО!
-// Представьте, что вы попросили бэкенд-разработчика об этом
+import { filtersFetch } from "../../actions";
 
 const HeroesFilters = () => {
     const {filters, activeFilter} = useSelector(state => state.filters);
@@ -17,10 +12,8 @@ const HeroesFilters = () => {
     const dispatch = useDispatch();
 
     useEffect(() => {
-        request("http://localhost:3001/filters")
-            .then(data => dispatch(filtersFetched(data)))
-            .catch(() => dispatch(filtersFetchingError()))
-    }, [request, dispatch])
+        dispatch(filtersFetch(request))
+    }, [])
 
 
     const onFilter = (element) => {
