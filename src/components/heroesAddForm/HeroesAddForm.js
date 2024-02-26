@@ -30,6 +30,9 @@ const HeroesAddForm = () => {
     const onSentForm = (e) => {
         e.preventDefault();
         const newId = uuidv4();
+        if (element === 'none'){
+            return
+        }
         const newHero = {
             id: newId,
             name: name,
@@ -78,7 +81,7 @@ const HeroesAddForm = () => {
                     name="element"
                     value={element}
                     onChange={changeElement}>
-                    <option >Я владею элементом...</option>
+                    <option value="none">Я владею элементом...</option>
                     <option value="fire">Огонь</option>
                     <option value="water">Вода</option>
                     <option value="wind">Ветер</option>
